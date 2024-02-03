@@ -5,6 +5,7 @@ type ModalProps = {
   children: React.ReactNode;
   title: string;
   isOpen: boolean;
+  isHideHeaderClose?: boolean;
   onClose?: (type: "click" | "esc", target: EventTarget) => void;
   onConfirm?: () => void;
   footer?: {
@@ -24,6 +25,7 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   title,
   isOpen,
+  isHideHeaderClose,
   ...props
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -65,13 +67,15 @@ export const Modal: React.FC<ModalProps> = ({
         <header data-modal-header>
           <h2>{title}</h2>
 
-          <button
-            data-modal-close
-            ref={closeButtonRef}
-            onClick={handleCloseClick}
-          >
-            X
-          </button>
+          {!isHideHeaderClose && (
+            <button
+              data-modal-close
+              ref={closeButtonRef}
+              onClick={handleCloseClick}
+            >
+              X
+            </button>
+          )}
         </header>
 
         {children}
