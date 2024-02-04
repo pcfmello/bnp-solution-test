@@ -10,12 +10,34 @@
  * - Utilize a interface IUser para tipar os dados
  */
 
-import { NextApiRequest, NextApiResponse } from 'next/types';
+import { NextApiRequest, NextApiResponse } from "next/types";
+import { faker } from "@faker-js/faker";
+import { IUser } from "@/types/user.d";
 
-import { IUser } from '@/types/user.d';
+const users: IUser[] = Array.from({ length: 10 }, () => ({
+  id: faker.number.int(),
+  name: faker.person.fullName(),
+  email: faker.internet.email().toLowerCase(),
+}));
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
-	const users: Array<unknown> = [];
+async function getUsersMockRepository(): Promise<IUser[]> {
+  return Promise.resolve(users);
+}
 
-	return res.status(500).json(users);
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const { method } = req;
+
+    switch (method) {
+      case "GET":
+        const users: Array<IUser> = await getUsersMockRepository();
+        res.status(200).json(users);
+        return;
+      default:
+        res.setHeader("Allow", ["GET"]);
+        res.status(405).json({ message: "Método não suportado" });
+    }
+  } catch (e) {
+    res.status(500).json({ message: "Erro interno no servidor" });
+  }
 };
