@@ -7,48 +7,73 @@
  * - Disparar as mensagens a partir dos botões abaixo
  */
 
-import styles from '@/styles/context-api.module.css';
-import { IToastMessage } from '@/types/toast-message';
-import { ToastMessage } from '@/components/ToastMessage';
+import { ToastMessage } from "@/components/ToastMessage";
+import useAlert from "@/hooks/useAlert";
+import styles from "@/styles/context-api.module.css";
+import { IToastMessage } from "@/types/toast-message.d";
+
+export interface IAddToastMessage {
+  message: string;
+  type: "success" | "error";
+  duration?: number;
+}
 
 export default function ContextApi() {
-	const messages: Array<IToastMessage> = [
-		{
-			id: '1',
-			message: 'Mensagem de sucesso',
-			type: 'success',
-		},
-		{
-			id: '2',
-			message: 'Mensagem de erro',
-			type: 'error',
-		},
-	];
+  const { handleNotify } = useAlert();
 
-	function handleSuccessButtonClick() {
-		alert('Method: handleSuccessButtonClick not implemented');
-	}
+  const messages: Array<IToastMessage> = [
+    {
+      id: "1",
+      message: "Mensagem de sucesso",
+      type: "success",
+    },
+    {
+      id: "2",
+      message: "Mensagem de erro",
+      type: "error",
+    },
+  ];
 
-	function handleErrorButtonClick() {
-		alert('Method: handleErrorButtonClick not implemented');
-	}
+  function handleSuccessButtonClick(content: IAddToastMessage) {
+    handleNotify(content);
+  }
 
-	return (
-		<>
-			<div className={styles.container}>
-				<button type="button" onClick={handleSuccessButtonClick}>
-					Disparar mensagem de sucesso
-				</button>
-				<button type="button" onClick={handleErrorButtonClick}>
-					Disparar mensagem de erro
-				</button>
-			</div>
+  function handleErrorButtonClick(content: IAddToastMessage) {
+    handleNotify(content);
+  }
 
-			<div className={styles['toast-container']}>
-				{messages.map((message) => (
-					<ToastMessage key={message.id} content={message} />
-				))}
-			</div>
-		</>
-	);
+  return (
+    <>
+      <div className={styles.container}>
+        <button
+          type="button"
+          onClick={() =>
+            handleSuccessButtonClick({
+              message: "Mensagem de sucesso",
+              type: "success",
+            })
+          }
+        >
+          Disparar mensagem de sucesso
+        </button>
+        <button
+          type="button"
+          onClick={() =>
+            handleErrorButtonClick({
+              message: "Mensagem de erro",
+              type: "error",
+            })
+          }
+        >
+          Disparar mensagem de erro
+        </button>
+      </div>
+
+      <div className={styles["toast-container"]}>
+        {messages.map((message) => (
+          <ToastMessage key={message.id} content={message} />
+        ))}
+      </div>
+    </>
+  );
 }
