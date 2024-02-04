@@ -8,28 +8,62 @@
  * - Ao dar 'submit', deve ser feito uma request para /api/users/create
  * - Lide com os possíveis erros
  */
-
-import styles from '@/styles/formulario.module.css';
+import { SubmitHandler, useForm } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
+import styles from "@/styles/formulario.module.css";
+import { IUserCreate } from "@/types/user";
 
 export default function Form() {
-	function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-		event.preventDefault();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm<IUserCreate>();
+  const onSubmit: SubmitHandler<IUserCreate> = async (
+    formData: IUserCreate
+  ) => {
+    try {
+      const response = await fetch("/api/users/create", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
 
-		console.log('submit');
-	}
+      if (!response.ok) throw new Error("Erro ao obter os dados");
 
-	return (
-		<div className={styles.container}>
-			<div className={styles.content}>
-				<form onSubmit={handleSubmit}>
-					<input type="text" placeholder="Name" />
-					<input type="email" placeholder="E-mail" />
+      reset();
+      alert("Usuário adicionado!");
+    } catch (e: any) {
+      alert(e.message);
+    }
+  };
 
-					<button type="submit" data-type="confirm">
-						Enviar
-					</button>
-				</form>
-			</div>
-		</div>
-	);
+  return (
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <>
+            <input
+              type="text"
+              placeholder="Name *"
+              {...register("name", { required: "Nome é obrigatório" })}
+            />
+            <ErrorMessage errors={errors} name="name" />
+          </>
+          <>
+            <input
+              type="email"
+              placeholder="E-mail *"
+              {...register("email", { required: "Email é obrigatório" })}
+            />
+            <ErrorMessage errors={errors} name="email" />
+          </>
+
+          <button type="submit" data-type="confirm">
+            Enviar
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }

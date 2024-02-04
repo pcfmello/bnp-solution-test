@@ -17,7 +17,7 @@ import { IUser, IUserCreate } from "@/types/user.d";
 const users: IUser[] = [];
 
 async function addUserMockRepository(user: IUserCreate): Promise<IUser> {
-  const newUser = { ...user, id: faker.number.int() };
+  const newUser: IUser = { ...user, id: faker.number.int() };
   users.push(newUser);
   return Promise.resolve(newUser);
 }
@@ -28,8 +28,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     switch (method) {
       case "POST":
-        const user: IUser = await addUserMockRepository(body);
-        res.status(200).json(user);
+        const user: IUser = JSON.parse(body);
+        const addedUser = await addUserMockRepository(user);
+
+        res.status(200).json(addedUser);
         return;
       default:
         res.setHeader("Allow", ["POST"]);
