@@ -42,22 +42,28 @@ export default function Form() {
     <div className={styles.container}>
       <div className={styles.content}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <>
+          <div>
             <input
               type="text"
+              className={`${errors.name && styles.inputError}`}
               placeholder="Name *"
               {...register("name", { required: "Nome é obrigatório" })}
             />
-            <ErrorMessage errors={errors} name="name" />
-          </>
-          <>
+            <div className={styles.textError}>
+              <ErrorMessage errors={errors} name="name" />
+            </div>
+          </div>
+          <div>
             <input
               type="email"
+              className={`${errors.email && styles.inputError}`}
               placeholder="E-mail *"
               {...register("email", { required: "Email é obrigatório" })}
             />
-            <ErrorMessage errors={errors} name="email" />
-          </>
+            <div className={styles.textError}>
+              <ErrorMessage errors={errors} name="email" />
+            </div>
+          </div>
 
           <button type="submit" data-type="confirm">
             Enviar
