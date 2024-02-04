@@ -1,37 +1,38 @@
-import styles from '@/styles/home.module.css';
+import styles from "@/styles/home.module.css";
+import Link from "next/link";
 
 export default function Home() {
-	return (
-		<div className={styles.container}>
-			<ul>
-				<li>
-					<a href="/modal">Modal</a>
-				</li>
+  return (
+    <div className={styles.container}>
+      <ul>
+        <li>
+          <Link href="/modal">Modal</Link>
+        </li>
 
-				<li>
-					<a href="/modal-de-confirmacao">Modal de confirmação</a>
-				</li>
+        <li>
+          <Link href="/modal-de-confirmacao">Modal de confirmação</Link>
+        </li>
 
-				<li>
-					<a href="/lista">Lista</a>
-				</li>
+        <li>
+          <Link href="/lista">Lista</Link>
+        </li>
 
-				<li>
-					<a href="/formulario">Formulário</a>
-				</li>
+        <li>
+          <Link href="/formulario">Formulário</Link>
+        </li>
 
-				<li>
-					<a href="/context-api">Context API</a>
-				</li>
+        <li>
+          <Link href="/context-api">Context API</Link>
+        </li>
 
-				<li>
-					<a href="/pagina-estatica">Pagina estática</a>
-				</li>
+        <li>
+          <Link href="/pagina-estatica">Pagina estática</Link>
+        </li>
 
-				<li>
-					<a href="/ciclo-de-vida">Ciclo de vida de componente</a>
-				</li>
-			</ul>
-		</div>
-	);
+        <li>
+          <Link href="/ciclo-de-vida">Ciclo de vida de componente</Link>
+        </li>
+      </ul>
+    </div>
+  );
 }
