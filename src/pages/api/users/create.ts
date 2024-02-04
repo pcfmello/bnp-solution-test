@@ -10,12 +10,32 @@
  * - Você deve corrigir a interface IUserCreate em src/types/user.d.ts
  */
 
-import { NextApiRequest, NextApiResponse } from 'next/types';
-
-import { IUser, IUserCreate } from '@/types/user.d';
+import { NextApiRequest, NextApiResponse } from "next/types";
+import { faker } from "@faker-js/faker";
+import { IUser, IUserCreate } from "@/types/user.d";
 
 const users: IUser[] = [];
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
-	return res.status(400).json(undefined);
+async function addUserMockRepository(user: IUserCreate): Promise<IUser> {
+  const newUser = { ...user, id: faker.number.int() };
+  users.push(newUser);
+  return Promise.resolve(newUser);
+}
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const { method, body } = req;
+
+    switch (method) {
+      case "POST":
+        const user: IUser = await addUserMockRepository(body);
+        res.status(200).json(user);
+        return;
+      default:
+        res.setHeader("Allow", ["POST"]);
+        res.status(405).json({ message: "Método não suportado" });
+    }
+  } catch (e) {
+    res.status(500).json({ message: "Erro interno no servidor" });
+  }
 };
